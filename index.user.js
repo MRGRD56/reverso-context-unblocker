@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Remove the blocking banner showing to unauthorized users on Reverso Context
-// @namespace    https://context.reverso.net
+// @namespace    https://github.com/MRGRD56
 // @version      1.0
 // @author       MRGRD56
 // @match        https://context.reverso.net/*
