@@ -3,41 +3,13 @@
 // @namespace    https://context.reverso.net
 // @version      1.0
 // @author       MRGRD56
-// @match        https://context.reverso.net*
+// @match        https://context.reverso.net/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=google.com
 // @grant        none
 // ==/UserScript==
 
 (function () {
     const EXTENSION_NAME = 'mrgrd56/reverso-context-unblocker';
-
-    const onNodeAdded = (handler, containingElement) => {
-        const observer = new MutationObserver((mutations) => {
-            console.log('MUTATED', {mutations});
-            for (const mutation of mutations) {
-                if (!mutation.addedNodes) {
-                    continue;
-                }
-
-                console.log('MUTATED_NODES_ADDED', {mutation, addedNodes: mutation.addedNodes});
-
-                for (const addedNode of mutation.addedNodes) {
-                    const isHandled = handler(addedNode);
-                    if (isHandled) {
-                        observer.disconnect();
-                        return;
-                    }
-                }
-            }
-        })
-
-        observer.observe(containingElement ?? document.body, {
-            childList: true
-            , subtree: true
-            , attributes: false
-            , characterData: false
-        })
-    };
 
     const unblockExamples = () => {
         try {
@@ -69,21 +41,5 @@
         }
     };
 
-    if (document.getElementById('blocked-results-banner')) {
-        unblockExamples();
-        return;
-    }
-
-    onNodeAdded((addedNode) => {
-        console.log('NODE ADDED', {addedNode});
-        if (addedNode.id !== 'blocked-results-banner') {
-            return false;
-        }
-
-        try {
-            return true;
-        } finally {
-            unblockExamples();
-        }
-    });
+    unblockExamples();
 })();
