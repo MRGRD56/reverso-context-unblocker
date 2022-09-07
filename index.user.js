@@ -11,23 +11,27 @@
 (function () {
     const EXTENSION_NAME = 'mrgrd56/reverso-context-unblocker';
 
-    const onNodeAdded = (handler) => {
+    const onNodeAdded = (handler, containingElement) => {
         const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
+            console.log('MUTATED', {mutations});
+            for (const mutation of mutations) {
                 if (!mutation.addedNodes) {
-                    return;
+                    continue;
                 }
+
+                console.log('MUTATED_NODES_ADDED', {mutation, addedNodes: mutation.addedNodes});
 
                 for (const addedNode of mutation.addedNodes) {
                     const isHandled = handler(addedNode);
                     if (isHandled) {
                         observer.disconnect();
+                        return;
                     }
                 }
-            })
+            }
         })
 
-        observer.observe(document.body, {
+        observer.observe(containingElement ?? document.body, {
             childList: true
             , subtree: true
             , attributes: false
@@ -71,6 +75,7 @@
     }
 
     onNodeAdded((addedNode) => {
+        console.log('NODE ADDED', {addedNode});
         if (addedNode.id !== 'blocked-results-banner') {
             return false;
         }
